@@ -1,37 +1,35 @@
 import { useApp } from "../context/AppContext";
+import AppointmentCard from "../components/AppointmentCard";
 
 export default function Appointments() {
-  const { appointments, deleteAppointment } = useApp();
+    const { appointments, deleteAppointment, updateAppointment } = useApp();
 
-  return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold">My Appointments</h1>
+    return (
+        <div className="flex items-center justify-center min-h-[80vh]">
+            <div className="bg-white w-full max-w-xl p-6 rounded-xl shadow-lg">
 
-      <div className="mt-4 space-y-3">
-        {appointments && appointments.length > 0 ? (
-          appointments.map((appt) => (
-            <div
-              key={appt.id}
-              className="border p-4 rounded shadow flex justify-between"
-            >
-              <div>
-                <h3 className="font-bold">{appt.doctor}</h3>
-                <p>Patient: {appt.patientName}</p>
-                <p>{new Date(appt.date).toLocaleString()}</p>
-              </div>
+                <h1 className="text-xl font-bold text-center">
+                    My Appointments
+                </h1>
 
-              <button
-                onClick={() => deleteAppointment(appt.id)}
-                className="bg-red-500 text-white px-3 py-1"
-              >
-                Delete
-              </button>
+                {appointments.length === 0 && (
+                    <p className="text-center text-gray-500 mt-4">
+                        No appointments yet
+                    </p>
+                )}
+
+                <div className="mt-4 space-y-3">
+                    {appointments.map((appt) => (
+                        <AppointmentCard
+                            key={appt.id + appt.patientName}
+                            appt={appt}
+                            onDelete={deleteAppointment}
+                            onUpdate={updateAppointment}
+                        />
+                    ))}
+                </div>
+
             </div>
-          ))
-        ) : (
-          <p>No appointments yet</p>
-        )}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }

@@ -41,6 +41,15 @@ setAppointments(res.data);
     }
   };
 
+  const updateAppointment = async (id, updatedData) => {
+  try {
+    await API.put(`/Appointments/${id}`, updatedData);
+    fetchAppointments();
+  } catch (error) {
+    console.error("Update error:", error);
+  }
+};
+
   useEffect(() => {
     fetchAppointments();
   }, []);
