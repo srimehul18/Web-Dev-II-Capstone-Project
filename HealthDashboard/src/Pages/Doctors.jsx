@@ -1,130 +1,84 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useDebounce from "../hooks/useDebounce";
 import { useApp } from "../context/AppContext";
-import { validFields } from "./validfields";
 
 export default function Doctors() {
-    const [query, setQuery] = useState("");
-    const debouncedQuery = useDebounce(query, 500);
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 500);
 
-    const [wikiData, setWikiData] = useState([]);
-    const [doctors, setDoctors] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const navigate = useNavigate();
 
-    const { addAppointment } = useApp();
+  useEffect(() => {
+    if (!debouncedQuery) return;
 
-    useEffect(() => {
-        if (!debouncedQuery) return;
+    const fetchDoctors = async () => {
+      const res = await fetch("https://randomuser.me/api/?results=6");
+      const data = await res.json();
 
-        if (!validFields.includes(debouncedQuery.toLowerCase())) {
-            setDoctors([]);
-            setWikiData([]);
-            return;
-        }
+      const docs = data.results.map((u) => ({
+        name: u.name.first + " " + u.name.last,
+        image: u.picture.medium,
+      }));
 
-        fetchData();
-    }, [debouncedQuery]);
-
-    const fetchData = async () => {
-        try {
-            // Wikipedia
-            const wikiRes = await fetch(
-                `https://en.wikipedia.org/w/api.php?action=opensearch&search=${debouncedQuery}&limit=2&origin=*`
-            );
-            const wikiJson = await wikiRes.json();
-            setWikiData(wikiJson[1]);
-
-            // RandomUser
-            const userRes = await fetch(
-                "https://randomuser.me/api/?results=5"
-            );
-            const userJson = await userRes.json();
-
-            const docs = userJson.results.map((u) => ({
-                name: u.name.first + " " + u.name.last,
-                image: u.picture.medium,
-            }));
-
-            setDoctors(docs);
-        } catch (err) {
-            console.error(err);
-        }
+      setDoctors(docs);
     };
 
-    const handleBook = (doc) => {
-        addAppointment({
-            doctor: doc.name,
-            patientName: "User",
-            date: new Date().toISOString(),
-        });
-    };
+    fetchDoctors();
+  }, [debouncedQuery]);
 
-    return (
-        <div className="flex items-center justify-center min-h-[80vh]">
-            {/* CENTER BOX */}
-            <div className="bg-white w-full max-w-xl p-6 rounded-xl shadow-lg">
+  const handleBook = (doc) => {
+    navigate("/appointments", {
+      state: { doctor: doc.name },
+    });
+  };
 
-                {/* TITLE */}
-                <h1 className="text-xl font-bold text-center">
-                    Find a Doctor
-                </h1>
+  return (
+    <div className="bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen px-6 py-10">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-2xl font-bold mb-4">Find Doctors</h1>
 
-                {/* SEARCH */}
-                <input
-                    placeholder="Search specialization (e.g. Cardiologist)"
-                    className="border p-3 mt-4 w-full rounded-lg"
-                    onChange={(e) => setQuery(e.target.value)}
-                />
+        <input
+          placeholder="Search specialization like Cardiologist..."
+          className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => setQuery(e.target.value)}
+        />
 
-                {/* EMPTY STATE */}
-                {!query && (
-                    <p className="text-center text-gray-500 mt-4">
-                        Start typing to search doctors
-                    </p>
-                )}
+        {!query && (
+          <div className="text-center mt-20 text-gray-500">
+            <p>🔍 Search for doctors</p>
+          </div>
+        )}
 
-                {/* WIKI */}
-                {wikiData.length > 0 && (
-                    <div className="mt-4 text-sm text-gray-600">
-                        {wikiData.map((item, i) => (
-                            <p key={i}>{item}</p>
-                        ))}
-                    </div>
-                )}
-
-                {/* RESULTS LIST */}
-                <div className="mt-4 space-y-3">
-                    {doctors.map((doc, i) => (
-                        <div
-                            key={i}
-                            className="flex items-center justify-between border p-3 rounded-lg"
-                        >
-                            <div className="flex items-center gap-3">
-                                <img
-                                    src={doc.image}
-                                    className="w-10 h-10 rounded-full"
-                                />
-                                <div>
-                                    <p className="font-semibold">
-                                        Dr. {doc.name.split(" ")[0]}
-                            
-                                    </p>
-                                    <p className="text-sm text-gray-500">
-                                        {query || "General"}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <button
-                                onClick={() => handleBook(doc)}
-                                className="bg-blue-500 text-white px-3 py-1 rounded"
-                            >
-                                Book
-                            </button>
-                        </div>
-                    ))}
+        <div className="grid md:grid-cols-3 gap-6 mt-8">
+          {doctors.map((doc, i) => (
+            <div
+              key={i}
+              className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition"
+            >
+              <div className="flex items-center gap-4">
+                <img src={doc.image} className="w-14 h-14 rounded-full" />
+                <div>
+                  <h3 className="font-semibold">
+                    Dr. {doc.name.split(" ")[0]}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    {query || "General Physician"}
+                  </p>
                 </div>
+              </div>
 
+              <button
+                onClick={() => handleBook(doc)}
+                className="mt-4 w-full bg-blue-600 text-white py-2 rounded-full hover:scale-105 transition"
+              >
+                Book Appointment →
+              </button>
             </div>
+          ))}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
