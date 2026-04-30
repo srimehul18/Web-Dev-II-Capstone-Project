@@ -2,19 +2,21 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen">
+    <div className="bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen transition">
 
       {/* HERO SECTION */}
       <section className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10 items-center">
 
         {/* LEFT */}
         <div>
-          <h1 className="text-4xl font-bold leading-tight">
+          <h1 className="text-4xl font-bold leading-tight text-gray-900 dark:text-gray-100">
             Smart Healthcare <br />
-            <span className="text-blue-600">Dashboard System</span>
+            <span className="text-blue-600 dark:text-blue-400">
+              Dashboard System
+            </span>
           </h1>
 
-          <p className="mt-4 text-gray-600">
+          <p className="mt-4 text-gray-600 dark:text-gray-300">
             Manage appointments, find specialists, and track healthcare data
             with a modern and intuitive interface.
           </p>
@@ -22,14 +24,14 @@ export default function Home() {
           <div className="mt-6 flex gap-4">
             <Link
               to="/doctors"
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:scale-105 transition"
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:scale-105 hover:bg-blue-700 transition"
             >
               Find Doctors
             </Link>
 
             <Link
               to="/appointments"
-              className="bg-gray-200 px-6 py-2 rounded-lg hover:scale-105 transition"
+              className="bg-gray-200 dark:bg-gray-700 dark:text-white px-6 py-2 rounded-lg hover:scale-105 transition"
             >
               View Appointments
             </Link>
@@ -41,7 +43,7 @@ export default function Home() {
           <img
             src="https://cdn-icons-png.flaticon.com/512/2966/2966481.png"
             alt="doctor"
-            className="w-72"
+            className="w-72 drop-shadow-lg"
           />
         </div>
       </section>
@@ -50,20 +52,26 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
 
         {/* Card 1 */}
-        <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition">
-          <p className="text-gray-500 text-sm">Total Appointments</p>
+        <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            Total Appointments
+          </p>
           <h2 className="text-2xl font-bold mt-2">24</h2>
         </div>
 
         {/* Card 2 */}
-        <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition">
-          <p className="text-gray-500 text-sm">Doctors Available</p>
+        <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            Doctors Available
+          </p>
           <h2 className="text-2xl font-bold mt-2">12</h2>
         </div>
 
         {/* Card 3 */}
-        <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition">
-          <p className="text-gray-500 text-sm">Reports</p>
+        <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            Reports
+          </p>
           <h2 className="text-2xl font-bold mt-2">5</h2>
         </div>
 
@@ -72,23 +80,23 @@ export default function Home() {
       {/* FEATURES SECTION */}
       <section className="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-6">
 
-        <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+        <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow hover:shadow-lg transition">
           <h3 className="font-semibold text-lg">Book Appointments</h3>
-          <p className="text-gray-600 mt-2 text-sm">
+          <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
             Schedule appointments quickly with doctors.
           </p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+        <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow hover:shadow-lg transition">
           <h3 className="font-semibold text-lg">Find Specialists</h3>
-          <p className="text-gray-600 mt-2 text-sm">
+          <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
             Search for doctors based on specialization.
           </p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+        <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow hover:shadow-lg transition">
           <h3 className="font-semibold text-lg">Track Records</h3>
-          <p className="text-gray-600 mt-2 text-sm">
+          <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
             Monitor appointments and healthcare data easily.
           </p>
         </div>

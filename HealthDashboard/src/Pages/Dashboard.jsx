@@ -25,41 +25,79 @@ export default function Dashboard() {
       ? appointments[appointments.length - 1]
       : null;
 
-  return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold">Dashboard</h1>
+return (
+  <div className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen px-6 py-10 transition">
 
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        {/* Total */}
-        <div className="bg-blue-500 text-white p-4 rounded shadow">
-          <h2>Total Appointments</h2>
-          <p className="text-2xl font-bold">{totalAppointments}</p>
+    <div className="max-w-5xl mx-auto">
+
+      {/* HEADER */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          Dashboard
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+          Overview of your healthcare activity
+        </p>
+      </div>
+
+      {/* GRID */}
+      <div className="grid md:grid-cols-2 gap-6">
+
+        {/* CARD */}
+        <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Total Appointments
+          </p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+            {totalAppointments}
+          </h2>
         </div>
 
-        {/* Today */}
-        <div className="bg-green-500 text-white p-4 rounded shadow">
-          <h2>Today’s Appointments</h2>
-          <p className="text-2xl font-bold">{todayCount}</p>
+        {/* CARD */}
+        <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Today’s Appointments
+          </p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+            {todayCount}
+          </h2>
         </div>
 
-        {/* Doctors */}
-        <div className="bg-purple-500 text-white p-4 rounded shadow">
-          <h2>Doctors Consulted</h2>
-          <p className="text-2xl font-bold">{uniqueDoctors}</p>
+        {/* CARD */}
+        <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Doctors Consulted
+          </p>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+            {uniqueDoctors}
+          </h2>
         </div>
 
-        {/* Last Appointment */}
-        <div className="bg-orange-500 text-white p-4 rounded shadow">
-          <h2>Last Appointment</h2>
+        {/* CARD */}
+        <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Last Appointment
+          </p>
+
           {lastAppointment ? (
-            <p className="text-sm">
-              {lastAppointment.doctor}
-            </p>
+            <div className="mt-2">
+              <p className="font-semibold text-gray-900 dark:text-gray-100">
+                {lastAppointment.doctor}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {lastAppointment.date}
+              </p>
+            </div>
           ) : (
-            <p>No data</p>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">
+              No data
+            </p>
           )}
         </div>
+
       </div>
+
     </div>
-  );
+  </div>
+);
 }
