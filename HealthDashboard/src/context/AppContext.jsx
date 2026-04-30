@@ -6,38 +6,41 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // 🔧 Fetch appointments safely
   const fetchAppointments = async () => {
+    const res = await API.get("/Appointments");
+console.log("API DATA:", res.data);  // 👈 add this
+setAppointments(res.data);
     try {
-      const res = await API.get("/Appointments"); // match your API
+      setLoading(true);
+      const res = await API.get("/Appointments");
       setAppointments(res.data);
-    } catch (error) {
-      console.error("Error fetching appointments:", error);
+    } catch (e) {
+      console.error("Fetch error:", e);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ➕ Add appointment
   const addAppointment = async (data) => {
     try {
       await API.post("/Appointments", data);
       fetchAppointments();
-    } catch (error) {
-      console.error("Error adding appointment:", error);
+    } catch (e) {
+      console.error("Add error:", e);
     }
   };
 
-  // ❌ Delete appointment
   const deleteAppointment = async (id) => {
     try {
       await API.delete(`/Appointments/${id}`);
       fetchAppointments();
-    } catch (error) {
-      console.error("Error deleting appointment:", error);
+    } catch (e) {
+      console.error("Delete error:", e);
     }
   };
 
-  // ✅ Safe useEffect
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -45,9 +48,10 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
-        user,
-        setUser,
+        user, setUser,
         appointments,
+        loading,
+        fetchAppointments,
         addAppointment,
         deleteAppointment,
       }}
@@ -57,11 +61,8 @@ export const AppProvider = ({ children }) => {
   );
 };
 
-// 🔐 Safe custom hook
 export const useApp = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useApp must be used within AppProvider");
-  }
-  return context;
+  const ctx = useContext(AppContext);
+  if (!ctx) throw new Error("useApp must be used within AppProvider");
+  return ctx;
 };
