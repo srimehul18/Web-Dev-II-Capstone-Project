@@ -14,7 +14,7 @@ export default function AppointmentCard({ appt, onDelete, onUpdate }) {
   };
 
   return (
-    <div className="flex items-center justify-between border border-emerald-100 bg-white/90 p-3 rounded-lg shadow-sm">
+    <div className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-lg shadow-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
       
       <div>
         <p className="font-semibold">{appt.doctor}</p>

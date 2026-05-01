@@ -6,65 +6,44 @@ export default function Navbar() {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
+  const linkClass = (path) =>
+    `rounded-full px-4 py-2 text-sm font-medium transition duration-200 ${
+      isActive(path)
+        ? "bg-emerald-50 text-emerald-700 shadow-sm dark:bg-emerald-900 dark:text-emerald-100"
+        : "text-gray-600 hover:bg-slate-100 hover:text-emerald-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-emerald-300"
+    }`;
 
   return (
-    <nav className="bg-white/90 dark:bg-emerald-950 shadow-md shadow-emerald-100/70 dark:shadow-black/20 border-b border-emerald-100 dark:border-emerald-900 px-8 py-4 flex justify-between items-center transition">
-      
-      {/* LOGO */}
-      <h1 className="text-xl font-bold text-emerald-700 dark:text-emerald-300">
+    <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-slate-100 bg-white/90 px-8 py-4 shadow-sm shadow-slate-200/70 backdrop-blur transition dark:border-gray-800 dark:bg-gray-950/90 dark:shadow-black/20">
+      <h1 className="text-xl font-bold tracking-tight text-emerald-700 dark:text-emerald-300">
         HealthDash
       </h1>
 
-      {/* LINKS */}
-      <div className="flex gap-6 items-center">
-        
-        <Link
-          to="/"
-          className={`transition hover:text-emerald-700 dark:hover:text-emerald-300 ${
-            isActive("/") ? "text-emerald-700 dark:text-emerald-300 font-semibold" : "text-gray-700 dark:text-gray-300"
-          }`}
-        >
+      <div className="flex items-center gap-2">
+        <Link to="/" className={linkClass("/")}>
           Home
         </Link>
 
-        <Link
-          to="/doctors"
-          className={`transition hover:text-emerald-700 dark:hover:text-emerald-300 ${
-            isActive("/doctors") ? "text-emerald-700 dark:text-emerald-300 font-semibold" : "text-gray-700 dark:text-gray-300"
-          }`}
-        >
+        <Link to="/doctors" className={linkClass("/doctors")}>
           Doctors
         </Link>
 
-        <Link
-          to="/appointments"
-          className={`transition hover:text-emerald-700 dark:hover:text-emerald-300 ${
-            isActive("/appointments") ? "text-emerald-700 dark:text-emerald-300 font-semibold" : "text-gray-700 dark:text-gray-300"
-          }`}
-        >
+        <Link to="/appointments" className={linkClass("/appointments")}>
           Appointments
         </Link>
 
-        <Link
-          to="/dashboard"
-          className={`transition hover:text-emerald-700 dark:hover:text-emerald-300 ${
-            isActive("/dashboard") ? "text-emerald-700 dark:text-emerald-300 font-semibold" : "text-gray-700 dark:text-gray-300"
-          }`}
-        >
+        <Link to="/dashboard" className={linkClass("/dashboard")}>
           Dashboard
         </Link>
 
-        {/* 🌙 DARK MODE TOGGLE */}
         <button
           onClick={() => setDark(!dark)}
-          className="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100 hover:scale-105 transition"
+          className="ml-2 rounded-full bg-slate-100 px-3 py-2 text-sm text-gray-700 transition duration-200 hover:scale-105 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-emerald-900 dark:hover:text-emerald-100"
         >
-          {dark ? "☀️" : "🌙"}
+          {dark ? "Light" : "Dark"}
         </button>
 
-        {/* PROFILE */}
-        <div className="w-8 h-8 bg-emerald-500 rounded-full ring-2 ring-emerald-100 dark:ring-emerald-800"></div>
-
+        <div className="ml-2 h-9 w-9 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 shadow-md shadow-emerald-200 ring-2 ring-white dark:shadow-black/20 dark:ring-gray-900"></div>
       </div>
     </nav>
   );

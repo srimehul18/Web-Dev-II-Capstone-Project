@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
-    <div className="bg-gradient-to-br from-emerald-50 via-white to-green-100 dark:from-gray-950 dark:via-emerald-950 dark:to-gray-900 min-h-screen transition">
+    <div className="min-h-screen bg-slate-50 transition dark:bg-gray-950">
 
       {/* HERO SECTION */}
       <section className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10 items-center">
@@ -24,14 +24,14 @@ export default function Home() {
           <div className="mt-6 flex gap-4">
             <Link
               to="/doctors"
-              className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:scale-105 hover:bg-emerald-700 transition"
+              className="bg-emerald-600 text-white px-6 py-2 rounded-lg shadow-lg shadow-emerald-200 transition duration-300 hover:scale-105 hover:bg-emerald-700 hover:shadow-xl dark:shadow-black/20"
             >
               Find Doctors
             </Link>
 
             <Link
               to="/appointments"
-              className="bg-white text-emerald-700 border border-emerald-200 dark:bg-emerald-900 dark:text-emerald-100 dark:border-emerald-800 px-6 py-2 rounded-lg hover:scale-105 hover:bg-emerald-50 dark:hover:bg-emerald-800 transition"
+              className="bg-white text-emerald-700 dark:bg-gray-900 dark:text-emerald-100 px-6 py-2 rounded-lg shadow-md shadow-slate-200 transition duration-300 hover:scale-105 hover:bg-emerald-50 hover:shadow-lg dark:hover:bg-gray-800 dark:shadow-black/20"
             >
               View Appointments
             </Link>
@@ -52,7 +52,7 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
 
         {/* Card 1 */}
-        <div className="bg-white/90 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow border border-emerald-100 dark:border-emerald-900 hover:shadow-lg hover:-translate-y-1 transition">
+        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl hover:-translate-y-1 transition duration-300 dark:shadow-black/20">
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             Total Appointments
           </p>
@@ -60,7 +60,7 @@ export default function Home() {
         </div>
 
         {/* Card 2 */}
-        <div className="bg-white/90 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow border border-emerald-100 dark:border-emerald-900 hover:shadow-lg hover:-translate-y-1 transition">
+        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl hover:-translate-y-1 transition duration-300 dark:shadow-black/20">
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             Doctors Available
           </p>
@@ -68,7 +68,7 @@ export default function Home() {
         </div>
 
         {/* Card 3 */}
-        <div className="bg-white/90 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow border border-emerald-100 dark:border-emerald-900 hover:shadow-lg hover:-translate-y-1 transition">
+        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl hover:-translate-y-1 transition duration-300 dark:shadow-black/20">
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             Reports
           </p>
@@ -80,21 +80,21 @@ export default function Home() {
       {/* FEATURES SECTION */}
       <section className="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-6">
 
-        <div className="bg-white/90 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow border border-emerald-100 dark:border-emerald-900 hover:shadow-lg transition">
+        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl transition duration-300 dark:shadow-black/20">
           <h3 className="font-semibold text-lg">Book Appointments</h3>
           <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
             Schedule appointments quickly with doctors.
           </p>
         </div>
 
-        <div className="bg-white/90 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow border border-emerald-100 dark:border-emerald-900 hover:shadow-lg transition">
+        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl transition duration-300 dark:shadow-black/20">
           <h3 className="font-semibold text-lg">Find Specialists</h3>
           <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
             Search for doctors based on specialization.
           </p>
         </div>
 
-        <div className="bg-white/90 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-xl shadow border border-emerald-100 dark:border-emerald-900 hover:shadow-lg transition">
+        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl transition duration-300 dark:shadow-black/20">
           <h3 className="font-semibold text-lg">Track Records</h3>
           <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
             Monitor appointments and healthcare data easily.

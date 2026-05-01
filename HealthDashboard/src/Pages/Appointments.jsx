@@ -51,7 +51,7 @@ export default function Appointments() {
     };
 
     return (
-        <div className="bg-gradient-to-br from-emerald-50 via-white to-green-100 dark:from-gray-950 dark:via-emerald-950 dark:to-gray-900 min-h-screen px-6 py-10 transition">
+        <div className="min-h-screen bg-slate-50 px-6 py-10 transition dark:bg-gray-950">
             <div className="max-w-5xl mx-auto">
 
                 <div className="mb-8">
@@ -64,7 +64,7 @@ export default function Appointments() {
                 </div>
 
                 {selectedDoctor && (
-                    <div className="mb-10 p-6 rounded-xl bg-emerald-50 dark:bg-gray-800 border border-emerald-100 dark:border-emerald-900 shadow-sm">
+                    <div className="mb-10 rounded-2xl bg-white p-6 shadow-lg shadow-slate-200/70 dark:bg-gray-900 dark:shadow-black/20">
                         <h2 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">
                             Book Appointment with Dr. {selectedDoctor}
                         </h2>
@@ -107,7 +107,7 @@ export default function Appointments() {
 
                         <button
                             onClick={handleSubmit}
-                            className="mt-5 bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 hover:scale-105 transition"
+                            className="mt-5 bg-emerald-600 text-white px-6 py-2 rounded-full shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:scale-105 hover:shadow-xl transition duration-300 dark:shadow-black/20"
                         >
                             Confirm Appointment
                         </button>
@@ -127,7 +127,7 @@ export default function Appointments() {
                     {currentAppointments.map((appt) => (
                         <div
                             key={appt.id}
-                            className="bg-white/90 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-5 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-900 hover:shadow-md hover:-translate-y-1 transition flex justify-between items-start"
+                            className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl hover:-translate-y-1 transition duration-300 flex justify-between items-start dark:shadow-black/20"
                         >
                             <div>
                                 <h3 className="font-semibold text-lg flex items-center gap-2">

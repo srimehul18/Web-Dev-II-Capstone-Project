@@ -1,6 +1,6 @@
 export default function Login() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-100 p-4">
+    <div className="min-h-screen bg-slate-50 p-4 dark:bg-gray-950">
       <h1 className="text-xl font-bold text-emerald-800">Login</h1>
 
       <input
