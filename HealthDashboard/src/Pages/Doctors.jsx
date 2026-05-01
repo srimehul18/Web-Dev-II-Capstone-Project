@@ -101,7 +101,10 @@ export default function Doctors() {
 
   const handleBook = (doc) => {
     navigate("/appointments", {
-      state: { doctor: doc.name },
+      state: {
+        doctor: doc.name,
+        specialization: doc.specialization,
+      },
     });
   };
 

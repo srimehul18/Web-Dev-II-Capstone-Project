@@ -10,8 +10,8 @@ export const AppProvider = ({ children }) => {
 
   const fetchAppointments = async () => {
     const res = await API.get("/Appointments");
-console.log("API DATA:", res.data);  // 👈 add this
-setAppointments(res.data);
+    console.log("API DATA:", res.data);
+    setAppointments(res.data);
     try {
       setLoading(true);
       const res = await API.get("/Appointments");
@@ -42,13 +42,13 @@ setAppointments(res.data);
   };
 
   const updateAppointment = async (id, updatedData) => {
-  try {
-    await API.put(`/Appointments/${id}`, updatedData);
-    fetchAppointments();
-  } catch (error) {
-    console.error("Update error:", error);
-  }
-};
+    try {
+      await API.put(`/Appointments/${id}`, updatedData);
+      fetchAppointments();
+    } catch (error) {
+      console.error("Update error:", error);
+    }
+  };
 
   useEffect(() => {
     fetchAppointments();
@@ -57,7 +57,8 @@ setAppointments(res.data);
   return (
     <AppContext.Provider
       value={{
-        user, setUser,
+        user,
+        setUser,
         appointments,
         loading,
         fetchAppointments,

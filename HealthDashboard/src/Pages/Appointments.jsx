@@ -1,11 +1,12 @@
 import { useApp } from "../context/AppContext";
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Appointments() {
     const { appointments, deleteAppointment, addAppointment } = useApp();
     const location = useLocation();
     const selectedDoctor = location.state?.doctor;
+    const selectedSpecialization = location.state?.specialization;
 
     const [form, setForm] = useState({
         patientName: "",
@@ -15,26 +16,28 @@ export default function Appointments() {
     });
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [toast, setToast] = useState("");
     const itemsPerPage = 5;
 
+    const formatDoctorName = (name) => {
+        if (!name) return "Dr.";
+        return name.startsWith("Dr.") ? name : `Dr. ${name}`;
+    };
+
     const totalPages = Math.ceil(appointments.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    const safeCurrentPage = Math.min(currentPage, totalPages || 1);
+    const startIndex = (safeCurrentPage - 1) * itemsPerPage;
 
     const currentAppointments = appointments.slice(
         startIndex,
         startIndex + itemsPerPage
     );
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [appointments]);
-
     const handleSubmit = () => {
         if (!form.patientName || !form.date || !form.time) return;
 
         addAppointment({
             doctor: selectedDoctor,
+            specialization: selectedSpecialization,
             patientName: form.patientName,
             complaint: form.complaint,
             date: form.date + " " + form.time,
@@ -65,8 +68,13 @@ export default function Appointments() {
 
                 {selectedDoctor && (
                     <div className="mb-10 rounded-2xl bg-white p-6 shadow-lg shadow-slate-200/70 dark:bg-gray-900 dark:shadow-black/20">
-                        <h2 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">
-                            Book Appointment with Dr. {selectedDoctor}
+                        <h2 className="font-semibold mb-4 text-gray-900 dark:text-gray-100 flex flex-wrap items-center gap-2">
+                            Book Appointment with {formatDoctorName(selectedDoctor)}
+                            {selectedSpecialization && (
+                                <span className="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-full">
+                                    {selectedSpecialization}
+                                </span>
+                            )}
                         </h2>
 
                         <div className="grid md:grid-cols-2 gap-4">
@@ -131,10 +139,12 @@ export default function Appointments() {
                         >
                             <div>
                                 <h3 className="font-semibold text-lg flex items-center gap-2">
-                                    {appt.doctor}
-                                    <span className="text-xs bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded">
-                                        Upcoming
-                                    </span>
+                                    {formatDoctorName(appt.doctor)}
+                                    {appt.specialization && (
+                                        <span className="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-full">
+                                            {appt.specialization}
+                                        </span>
+                                    )}
                                 </h3>
 
                                 <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
@@ -167,7 +177,7 @@ export default function Appointments() {
                     <div className="flex justify-center items-center mt-8 gap-2">
                         <button
                             onClick={() => setCurrentPage((p) => p - 1)}
-                            disabled={currentPage === 1}
+                            disabled={safeCurrentPage === 1}
                             className="px-3 py-1 rounded border disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
                             Prev
@@ -178,7 +188,7 @@ export default function Appointments() {
                                 key={i}
                                 onClick={() => setCurrentPage(i + 1)}
                                 className={`px-3 py-1 rounded transition ${
-                                    currentPage === i + 1
+                                    safeCurrentPage === i + 1
                                         ? "bg-emerald-600 text-white"
                                         : "border hover:bg-gray-100 dark:hover:bg-gray-700"
                                 }`}
@@ -189,7 +199,7 @@ export default function Appointments() {
 
                         <button
                             onClick={() => setCurrentPage((p) => p + 1)}
-                            disabled={currentPage === totalPages}
+                            disabled={safeCurrentPage === totalPages}
                             className="px-3 py-1 rounded border disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
                             Next
