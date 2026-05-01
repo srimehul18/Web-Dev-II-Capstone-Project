@@ -26,7 +26,7 @@ export default function Dashboard() {
       : null;
 
 return (
-  <div className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen px-6 py-10 transition">
+  <div className="bg-gradient-to-br from-emerald-50 via-white to-green-100 dark:from-gray-950 dark:via-emerald-950 dark:to-gray-900 min-h-screen px-6 py-10 transition">
 
     <div className="max-w-5xl mx-auto">
 
@@ -44,7 +44,7 @@ return (
       <div className="grid md:grid-cols-2 gap-6">
 
         {/* CARD */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+        <div className="bg-white/90 dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-900 hover:shadow-md hover:-translate-y-1 transition">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             Total Appointments
           </p>
@@ -54,7 +54,7 @@ return (
         </div>
 
         {/* CARD */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+        <div className="bg-white/90 dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-900 hover:shadow-md hover:-translate-y-1 transition">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             Today’s Appointments
           </p>
@@ -64,7 +64,7 @@ return (
         </div>
 
         {/* CARD */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+        <div className="bg-white/90 dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-900 hover:shadow-md hover:-translate-y-1 transition">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             Doctors Consulted
           </p>
@@ -74,7 +74,7 @@ return (
         </div>
 
         {/* CARD */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+        <div className="bg-white/90 dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-900 hover:shadow-md hover:-translate-y-1 transition">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             Last Appointment
           </p>

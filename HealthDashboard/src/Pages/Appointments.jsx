@@ -51,7 +51,7 @@ export default function Appointments() {
     };
 
     return (
-        <div className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen px-6 py-10 transition">
+        <div className="bg-gradient-to-br from-emerald-50 via-white to-green-100 dark:from-gray-950 dark:via-emerald-950 dark:to-gray-900 min-h-screen px-6 py-10 transition">
             <div className="max-w-5xl mx-auto">
 
                 <div className="mb-8">
@@ -64,7 +64,7 @@ export default function Appointments() {
                 </div>
 
                 {selectedDoctor && (
-                    <div className="mb-10 p-6 rounded-xl bg-blue-50 dark:bg-gray-800 border border-blue-100 dark:border-gray-700 shadow-sm">
+                    <div className="mb-10 p-6 rounded-xl bg-emerald-50 dark:bg-gray-800 border border-emerald-100 dark:border-emerald-900 shadow-sm">
                         <h2 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">
                             Book Appointment with Dr. {selectedDoctor}
                         </h2>
@@ -72,7 +72,7 @@ export default function Appointments() {
                         <div className="grid md:grid-cols-2 gap-4">
                             <input
                                 placeholder="Patient Name"
-                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
+                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
                                 value={form.patientName}
                                 onChange={(e) =>
                                     setForm({ ...form, patientName: e.target.value })
@@ -81,7 +81,7 @@ export default function Appointments() {
 
                             <input
                                 placeholder="Primary Complaint"
-                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
+                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
                                 value={form.complaint}
                                 onChange={(e) =>
                                     setForm({ ...form, complaint: e.target.value })
@@ -90,7 +90,7 @@ export default function Appointments() {
 
                             <input
                                 type="date"
-                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
+                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
                                 onChange={(e) =>
                                     setForm({ ...form, date: e.target.value })
                                 }
@@ -98,7 +98,7 @@ export default function Appointments() {
 
                             <input
                                 type="time"
-                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
+                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
                                 onChange={(e) =>
                                     setForm({ ...form, time: e.target.value })
                                 }
@@ -107,7 +107,7 @@ export default function Appointments() {
 
                         <button
                             onClick={handleSubmit}
-                            className="mt-5 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 hover:scale-105 transition"
+                            className="mt-5 bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 hover:scale-105 transition"
                         >
                             Confirm Appointment
                         </button>
@@ -127,7 +127,7 @@ export default function Appointments() {
                     {currentAppointments.map((appt) => (
                         <div
                             key={appt.id}
-                            className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition flex justify-between items-start"
+                            className="bg-white/90 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-5 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-900 hover:shadow-md hover:-translate-y-1 transition flex justify-between items-start"
                         >
                             <div>
                                 <h3 className="font-semibold text-lg flex items-center gap-2">
@@ -179,7 +179,7 @@ export default function Appointments() {
                                 onClick={() => setCurrentPage(i + 1)}
                                 className={`px-3 py-1 rounded transition ${
                                     currentPage === i + 1
-                                        ? "bg-blue-600 text-white"
+                                        ? "bg-emerald-600 text-white"
                                         : "border hover:bg-gray-100 dark:hover:bg-gray-700"
                                 }`}
                             >

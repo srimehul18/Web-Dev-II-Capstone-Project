@@ -14,7 +14,7 @@ export default function AppointmentCard({ appt, onDelete, onUpdate }) {
   };
 
   return (
-    <div className="flex items-center justify-between border p-3 rounded-lg">
+    <div className="flex items-center justify-between border border-emerald-100 bg-white/90 p-3 rounded-lg shadow-sm">
       
       <div>
         <p className="font-semibold">{appt.doctor}</p>
@@ -23,7 +23,7 @@ export default function AppointmentCard({ appt, onDelete, onUpdate }) {
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border p-1 mt-1 rounded"
+            className="border border-emerald-200 p-1 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         ) : (
           <p className="text-sm text-gray-600">
@@ -40,7 +40,7 @@ export default function AppointmentCard({ appt, onDelete, onUpdate }) {
         {isEditing ? (
           <button
             onClick={handleSave}
-            className="bg-green-500 text-white px-3 py-1 rounded"
+            className="bg-emerald-600 text-white px-3 py-1 rounded hover:bg-emerald-700 transition"
           >
             Save
           </button>

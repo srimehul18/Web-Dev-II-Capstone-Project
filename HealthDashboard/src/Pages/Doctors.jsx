@@ -8,6 +8,9 @@ export default function Doctors() {
   const debouncedQuery = useDebounce(query, 500);
 
   const [doctors, setDoctors] = useState([]);
+  const [availability, setAvailability] = useState(false);
+  const [ratingFilter, setRatingFilter] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +23,8 @@ export default function Doctors() {
       const docs = data.results.map((u) => ({
         name: u.name.first + " " + u.name.last,
         image: u.picture.medium,
+        rating: (Math.random() * 2 + 3).toFixed(1),
+        available: Math.random() > 0.3,
       }));
 
       setDoctors(docs);
@@ -34,12 +39,16 @@ export default function Doctors() {
     });
   };
 
-  return (
-    <div className="bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen px-6 py-10 transition">
+  const filteredDoctors = doctors.filter((doc) => {
+    if (availability && !doc.available) return false;
+    if (ratingFilter && doc.rating < 4) return false;
+    return true;
+  });
 
+  return (
+    <div className="bg-gradient-to-br from-emerald-50 via-white to-green-100 dark:from-gray-950 dark:via-emerald-950 dark:to-gray-900 min-h-screen px-6 py-10 transition">
       <div className="max-w-6xl mx-auto">
 
-        {/* HEADER */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             Find Doctors
@@ -49,20 +58,18 @@ export default function Doctors() {
           </p>
         </div>
 
-        {/* SEARCH BAR */}
         <div className="relative">
           <input
             placeholder="Search specialization like Cardiologist..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full p-3 pl-4 pr-10 rounded-lg border 
-              bg-white dark:bg-gray-800 
-              text-gray-900 dark:text-white
-              border-gray-300 dark:border-gray-700
-              focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            bg-white dark:bg-gray-800 
+            text-gray-900 dark:text-white
+            border-emerald-200 dark:border-emerald-900
+            focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
           />
 
-          {/* CLEAR BUTTON */}
           {query && (
             <button
               onClick={() => setQuery("")}
@@ -73,7 +80,30 @@ export default function Doctors() {
           )}
         </div>
 
-        {/* EMPTY STATE */}
+        <div className="flex gap-4 mt-4 flex-wrap">
+          <button
+            onClick={() => setAvailability(!availability)}
+            className={`px-3 py-1 rounded-full border transition ${
+              availability
+                ? "bg-green-500 text-white"
+                : "bg-white dark:bg-gray-800 border-emerald-200 dark:border-emerald-900 text-gray-700 dark:text-gray-200"
+            }`}
+          >
+            Available Today
+          </button>
+
+          <button
+            onClick={() => setRatingFilter(!ratingFilter)}
+            className={`px-3 py-1 rounded-full border transition ${
+              ratingFilter
+                ? "bg-yellow-500 text-white"
+                : "bg-white dark:bg-gray-800 border-emerald-200 dark:border-emerald-900 text-gray-700 dark:text-gray-200"
+            }`}
+          >
+            Rating 4+
+          </button>
+        </div>
+
         {!query && (
           <div className="text-center mt-20 text-gray-500 dark:text-gray-400">
             <p className="text-lg">🔍 Search for doctors</p>
@@ -83,22 +113,20 @@ export default function Doctors() {
           </div>
         )}
 
-        {/* DOCTOR CARDS */}
         <div className="grid md:grid-cols-3 gap-6 mt-8">
-          {doctors.map((doc, i) => (
+          {filteredDoctors.map((doc, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-gray-800 
+              className="bg-white/90 dark:bg-gray-800 
               text-gray-900 dark:text-gray-100 
-              p-5 rounded-xl shadow-sm 
+              p-5 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-900
               hover:shadow-lg hover:-translate-y-1 
               transition"
             >
-              {/* TOP */}
               <div className="flex items-center gap-4">
                 <img
                   src={doc.image}
-                  className="w-14 h-14 rounded-full border dark:border-gray-700"
+                  className="w-14 h-14 rounded-full border border-emerald-100 dark:border-emerald-900"
                 />
 
                 <div>
@@ -112,20 +140,18 @@ export default function Doctors() {
                 </div>
               </div>
 
-              {/* EXTRA INFO */}
               <div className="mt-3 text-sm text-gray-500 dark:text-gray-400 space-y-1">
-                <p>⭐ 4.5 Rating</p>
+                <p>⭐ {doc.rating} Rating</p>
                 <p>📍 City Hospital</p>
-                <p className="text-green-500 dark:text-green-400">
-                  🟢 Available Today
+                <p className={doc.available ? "text-green-500 dark:text-green-400" : "text-gray-400"}>
+                  {doc.available ? "🟢 Available Today" : "Not Available"}
                 </p>
               </div>
 
-              {/* BUTTON */}
               <button
                 onClick={() => handleBook(doc)}
-                className="mt-4 w-full bg-blue-600 text-white py-2 rounded-full 
-                hover:bg-blue-700 hover:scale-105 transition"
+                className="mt-4 w-full bg-emerald-600 text-white py-2 rounded-full 
+                hover:bg-emerald-700 hover:scale-105 transition"
               >
                 Book Appointment →
               </button>
