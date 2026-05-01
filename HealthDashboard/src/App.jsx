@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import Doctors from "./pages/Doctors";
-import Appointments from "./pages/Appointments";
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
+import Home from "./Pages/Home";
+import Doctors from "./Pages/Doctors";
+import Appointments from "./Pages/Appointments";
+import Dashboard from "./Pages/Dashboard";
+import Login from "./Pages/Login";
 
 
 export default function App() {
