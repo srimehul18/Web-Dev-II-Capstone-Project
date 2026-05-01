@@ -14,13 +14,13 @@ export default function DoctorCard({ doc, onBook, query }) {
           </h3>
 
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {query || "General Physician"}
+            {doc.specialization || query || "General Physician"}
           </p>
         </div>
       </div>
 
       <div className="mt-3 space-y-1 text-sm text-gray-500 dark:text-gray-400">
-        <p>{doc.rating}⭐ Rating </p>
+        <p>{doc.rating} Rating</p>
         <p>City Hospital</p>
         <p
           className={
