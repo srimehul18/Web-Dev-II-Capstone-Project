@@ -1,6 +1,6 @@
 import { useApp } from "../context/AppContext";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Appointments() {
     const { appointments, deleteAppointment, addAppointment } = useApp();
@@ -13,6 +13,22 @@ export default function Appointments() {
         date: "",
         time: "",
     });
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [toast, setToast] = useState("");
+    const itemsPerPage = 5;
+
+    const totalPages = Math.ceil(appointments.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+
+    const currentAppointments = appointments.slice(
+        startIndex,
+        startIndex + itemsPerPage
+    );
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [appointments]);
 
     const handleSubmit = () => {
         if (!form.patientName || !form.date || !form.time) return;
@@ -36,10 +52,8 @@ export default function Appointments() {
 
     return (
         <div className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen px-6 py-10 transition">
-
             <div className="max-w-5xl mx-auto">
 
-                {/* HEADER */}
                 <div className="mb-8">
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                         My Appointments
@@ -49,26 +63,16 @@ export default function Appointments() {
                     </p>
                 </div>
 
-                {/* BOOKING FORM */}
                 {selectedDoctor && (
-                    <div className="mb-10 p-6 rounded-xl 
-                    bg-blue-50 dark:bg-gray-800 
-                    border border-blue-100 dark:border-gray-700 
-                    shadow-sm">
-
+                    <div className="mb-10 p-6 rounded-xl bg-blue-50 dark:bg-gray-800 border border-blue-100 dark:border-gray-700 shadow-sm">
                         <h2 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">
                             Book Appointment with Dr. {selectedDoctor}
                         </h2>
 
                         <div className="grid md:grid-cols-2 gap-4">
-
                             <input
                                 placeholder="Patient Name"
-                                className="border p-2 rounded 
-                                bg-white dark:bg-gray-900 
-                                text-gray-900 dark:text-white 
-                                border-gray-300 dark:border-gray-700 
-                                focus:ring-2 focus:ring-blue-400 outline-none"
+                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                                 value={form.patientName}
                                 onChange={(e) =>
                                     setForm({ ...form, patientName: e.target.value })
@@ -77,11 +81,7 @@ export default function Appointments() {
 
                             <input
                                 placeholder="Primary Complaint"
-                                className="border p-2 rounded 
-                                bg-white dark:bg-gray-900 
-                                text-gray-900 dark:text-white 
-                                border-gray-300 dark:border-gray-700 
-                                focus:ring-2 focus:ring-blue-400 outline-none"
+                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                                 value={form.complaint}
                                 onChange={(e) =>
                                     setForm({ ...form, complaint: e.target.value })
@@ -90,11 +90,7 @@ export default function Appointments() {
 
                             <input
                                 type="date"
-                                className="border p-2 rounded 
-                                bg-white dark:bg-gray-900 
-                                text-gray-900 dark:text-white 
-                                border-gray-300 dark:border-gray-700 
-                                focus:ring-2 focus:ring-blue-400 outline-none"
+                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                                 onChange={(e) =>
                                     setForm({ ...form, date: e.target.value })
                                 }
@@ -102,11 +98,7 @@ export default function Appointments() {
 
                             <input
                                 type="time"
-                                className="border p-2 rounded 
-                                bg-white dark:bg-gray-900 
-                                text-gray-900 dark:text-white 
-                                border-gray-300 dark:border-gray-700 
-                                focus:ring-2 focus:ring-blue-400 outline-none"
+                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-blue-400 outline-none"
                                 onChange={(e) =>
                                     setForm({ ...form, time: e.target.value })
                                 }
@@ -115,15 +107,13 @@ export default function Appointments() {
 
                         <button
                             onClick={handleSubmit}
-                            className="mt-5 bg-blue-600 text-white px-6 py-2 rounded-full 
-                            hover:bg-blue-700 hover:scale-105 transition"
+                            className="mt-5 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 hover:scale-105 transition"
                         >
                             Confirm Appointment
                         </button>
                     </div>
                 )}
 
-                {/* EMPTY STATE */}
                 {appointments.length === 0 && (
                     <div className="text-center text-gray-500 dark:text-gray-400 mt-20">
                         <p className="text-lg">📅 No appointments yet</p>
@@ -133,23 +123,15 @@ export default function Appointments() {
                     </div>
                 )}
 
-                {/* APPOINTMENTS LIST */}
                 <div className="space-y-5">
-                    {appointments.map((appt) => (
+                    {currentAppointments.map((appt) => (
                         <div
                             key={appt.id}
-                            className="bg-white dark:bg-gray-800 
-                            text-gray-900 dark:text-gray-100 
-                            p-5 rounded-xl shadow-sm 
-                            hover:shadow-md hover:-translate-y-1 
-                            transition flex justify-between items-start"
+                            className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition flex justify-between items-start"
                         >
-                            {/* LEFT */}
                             <div>
                                 <h3 className="font-semibold text-lg flex items-center gap-2">
                                     {appt.doctor}
-
-                                    {/* STATUS BADGE */}
                                     <span className="text-xs bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded">
                                         Upcoming
                                     </span>
@@ -171,12 +153,9 @@ export default function Appointments() {
                                 </div>
                             </div>
 
-                            {/* DELETE BUTTON */}
                             <button
                                 onClick={() => deleteAppointment(appt.id)}
-                                className="text-red-500 hover:text-red-400 
-                                hover:bg-red-50 dark:hover:bg-red-900 
-                                px-3 py-1 rounded transition"
+                                className="text-red-500 hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 px-3 py-1 rounded transition"
                             >
                                 🗑
                             </button>
@@ -184,6 +163,39 @@ export default function Appointments() {
                     ))}
                 </div>
 
+                {totalPages > 1 && (
+                    <div className="flex justify-center items-center mt-8 gap-2">
+                        <button
+                            onClick={() => setCurrentPage((p) => p - 1)}
+                            disabled={currentPage === 1}
+                            className="px-3 py-1 rounded border disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                            Prev
+                        </button>
+
+                        {[...Array(totalPages)].map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setCurrentPage(i + 1)}
+                                className={`px-3 py-1 rounded transition ${
+                                    currentPage === i + 1
+                                        ? "bg-blue-600 text-white"
+                                        : "border hover:bg-gray-100 dark:hover:bg-gray-700"
+                                }`}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+
+                        <button
+                            onClick={() => setCurrentPage((p) => p + 1)}
+                            disabled={currentPage === totalPages}
+                            className="px-3 py-1 rounded border disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                            Next
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
