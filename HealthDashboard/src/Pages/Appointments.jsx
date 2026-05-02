@@ -276,7 +276,7 @@ export default function Appointments() {
                         <button
                             onClick={() => setCurrentPage((p) => p - 1)}
                             disabled={safeCurrentPage === 1}
-                            className="px-3 py-1 rounded border disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="px-3 py-1 rounded border text-gray-700 disabled:text-gray-400 disabled:opacity-60 hover:bg-gray-100 dark:text-gray-100 dark:border-gray-600 dark:disabled:text-gray-300 dark:hover:bg-gray-700"
                         >
                             Prev
                         </button>
@@ -288,7 +288,7 @@ export default function Appointments() {
                                 className={`px-3 py-1 rounded transition ${
                                     safeCurrentPage === i + 1
                                         ? "bg-emerald-600 text-white"
-                                        : "border hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        : "border text-gray-700 hover:bg-gray-100 dark:text-gray-100 dark:border-gray-600 dark:hover:bg-gray-700"
                                 }`}
                             >
                                 {i + 1}
@@ -298,7 +298,7 @@ export default function Appointments() {
                         <button
                             onClick={() => setCurrentPage((p) => p + 1)}
                             disabled={safeCurrentPage === totalPages}
-                            className="px-3 py-1 rounded border disabled:opacity-40 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="px-3 py-1 rounded border text-gray-700 disabled:text-gray-400 disabled:opacity-60 hover:bg-gray-100 dark:text-gray-100 dark:border-gray-600 dark:disabled:text-gray-300 dark:hover:bg-gray-700"
                         >
                             Next
                         </button>
