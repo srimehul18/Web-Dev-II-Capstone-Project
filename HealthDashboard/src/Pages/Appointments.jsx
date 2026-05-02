@@ -1,84 +1,141 @@
-import { useApp } from "../context/AppContext";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useApp } from "../context/AppContext" 
+import { useLocation } from "react-router-dom" 
+import { useState } from "react" 
 
 const emptyAppointmentForm = {
     patientName: "",
     complaint: "",
     date: "",
     time: "",
-};
+} 
+
+const emptyAppointmentErrors = {
+    patientName: "",
+    date: "",
+    time: "",
+} 
 
 export default function Appointments() {
-    const { appointments, deleteAppointment, addAppointment, updateAppointment } = useApp();
-    const location = useLocation();
-    const selectedDoctor = location.state?.doctor;
-    const selectedSpecialization = location.state?.specialization;
+    const { appointments, deleteAppointment, addAppointment, updateAppointment } = useApp() 
+    const location = useLocation() 
+    const selectedDoctor = location.state?.doctor 
+    const selectedSpecialization = location.state?.specialization 
 
-    const [form, setForm] = useState(emptyAppointmentForm);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [editingAppointmentId, setEditingAppointmentId] = useState(null);
-    const [editForm, setEditForm] = useState(emptyAppointmentForm);
-    const itemsPerPage = 5;
+    const [form, setForm] = useState(emptyAppointmentForm) 
+    const [currentPage, setCurrentPage] = useState(1) 
+    const [editingAppointmentId, setEditingAppointmentId] = useState(null) 
+    const [editForm, setEditForm] = useState(emptyAppointmentForm) 
+    const [formErrors, setFormErrors] = useState(emptyAppointmentErrors) 
+    const [editFormErrors, setEditFormErrors] = useState(emptyAppointmentErrors) 
+    const itemsPerPage = 5 
 
     const formatDoctorName = (name) => {
-        if (!name) return "Dr.";
-        return name.startsWith("Dr.") ? name : `Dr. ${name}`;
-    };
+        if (!name) return "Dr." 
+        return name.startsWith("Dr.") ? name : `Dr. ${name}` 
+    } 
 
-    const totalPages = Math.ceil(appointments.length / itemsPerPage);
-    const safeCurrentPage = Math.min(currentPage, totalPages || 1);
-    const startIndex = (safeCurrentPage - 1) * itemsPerPage;
+    const totalPages = Math.ceil(appointments.length / itemsPerPage) 
+    const safeCurrentPage = Math.min(currentPage, totalPages || 1) 
+    const startIndex = (safeCurrentPage - 1) * itemsPerPage 
 
     const currentAppointments = appointments.slice(
         startIndex,
         startIndex + itemsPerPage
-    );
+    ) 
+
+    const validateAppointmentForm = (appointmentForm) => {
+        const errors = { ...emptyAppointmentErrors } 
+
+        if (!appointmentForm.patientName.trim()) {
+            errors.patientName = "Patient name is required." 
+        }
+
+        if (!appointmentForm.date) {
+            errors.date = "Date is required." 
+        }
+
+        if (!appointmentForm.time) {
+            errors.time = "Time is required." 
+        }
+
+        return errors 
+    } 
+
+    const hasErrors = (errors) => Object.values(errors).some(Boolean) 
+
+    const handleFormChange = (field, value) => {
+        setForm((previousForm) => ({ ...previousForm, [field]: value })) 
+
+        if (field in formErrors && value.trim()) {
+            setFormErrors((previousErrors) => ({ ...previousErrors, [field]: "" })) 
+        }
+    } 
+
+    const handleEditFormChange = (field, value) => {
+        setEditForm((previousForm) => ({ ...previousForm, [field]: value })) 
+
+        if (field in editFormErrors && value.trim()) {
+            setEditFormErrors((previousErrors) => ({ ...previousErrors, [field]: "" })) 
+        }
+    } 
 
     const handleSubmit = () => {
-        if (!form.patientName || !form.date || !form.time) return;
+        const errors = validateAppointmentForm(form) 
+
+        if (hasErrors(errors)) {
+            setFormErrors(errors) 
+            return 
+        }
 
         addAppointment({
             doctor: selectedDoctor,
             specialization: selectedSpecialization,
-            patientName: form.patientName,
+            patientName: form.patientName.trim(),
             complaint: form.complaint,
             date: form.date + " " + form.time,
-        });
+        }) 
 
-        setForm(emptyAppointmentForm);
-        window.history.replaceState({}, document.title);
-    };
+        setForm(emptyAppointmentForm) 
+        setFormErrors(emptyAppointmentErrors) 
+        window.history.replaceState({}, document.title) 
+    } 
 
     const resetEditForm = () => {
-        setEditingAppointmentId(null);
-        setEditForm(emptyAppointmentForm);
-    };
+        setEditingAppointmentId(null) 
+        setEditForm(emptyAppointmentForm) 
+        setEditFormErrors(emptyAppointmentErrors) 
+    } 
 
     const startEditingAppointment = (appt) => {
-        const [date = "", time = ""] = (appt.date || "").split(" ");
+        const [date = "", time = ""] = (appt.date || "").split(" ") 
 
-        setEditingAppointmentId(appt.id);
+        setEditingAppointmentId(appt.id) 
         setEditForm({
             patientName: appt.patientName || "",
             complaint: appt.complaint || "",
             date,
             time,
-        });
-    };
+        }) 
+        setEditFormErrors(emptyAppointmentErrors) 
+    } 
 
     const handleUpdateAppointment = (appt) => {
-        if (!editForm.patientName || !editForm.date || !editForm.time) return;
+        const errors = validateAppointmentForm(editForm) 
+
+        if (hasErrors(errors)) {
+            setEditFormErrors(errors) 
+            return 
+        }
 
         updateAppointment(appt.id, {
             ...appt,
-            patientName: editForm.patientName,
+            patientName: editForm.patientName.trim(),
             complaint: editForm.complaint,
             date: editForm.date + " " + editForm.time,
-        });
+        }) 
 
-        resetEditForm();
-    };
+        resetEditForm() 
+    } 
 
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10 transition dark:bg-gray-950">
@@ -105,41 +162,59 @@ export default function Appointments() {
                         </h2>
 
                         <div className="grid md:grid-cols-2 gap-4">
-                            <input
-                                placeholder="Patient Name"
-                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
-                                value={form.patientName}
-                                onChange={(e) =>
-                                    setForm({ ...form, patientName: e.target.value })
-                                }
-                            />
+                            <div>
+                                <input
+                                    placeholder="Patient Name"
+                                    className="w-full border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                    value={form.patientName}
+                                    onChange={(e) =>
+                                        handleFormChange("patientName", e.target.value)
+                                    }
+                                    aria-invalid={Boolean(formErrors.patientName)}
+                                />
+                                {formErrors.patientName && (
+                                    <p className="mt-1 text-sm text-red-500">{formErrors.patientName}</p>
+                                )}
+                            </div>
 
                             <input
                                 placeholder="Primary Complaint"
                                 className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
                                 value={form.complaint}
                                 onChange={(e) =>
-                                    setForm({ ...form, complaint: e.target.value })
+                                    handleFormChange("complaint", e.target.value)
                                 }
                             />
 
-                            <input
-                                type="date"
-                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
-                                value={form.date}
-                                onChange={(e) =>
-                                    setForm({ ...form, date: e.target.value })
-                                }
-                            />
+                            <div>
+                                <input
+                                    type="date"
+                                    className="w-full border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                    value={form.date}
+                                    onChange={(e) =>
+                                        handleFormChange("date", e.target.value)
+                                    }
+                                    aria-invalid={Boolean(formErrors.date)}
+                                />
+                                {formErrors.date && (
+                                    <p className="mt-1 text-sm text-red-500">{formErrors.date}</p>
+                                )}
+                            </div>
 
-                            <input
-                                type="time"
-                                className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
-                                value={form.time}
-                                onChange={(e) =>
-                                    setForm({ ...form, time: e.target.value })
-                                }
-                            />
+                            <div>
+                                <input
+                                    type="time"
+                                    className="w-full border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                    value={form.time}
+                                    onChange={(e) =>
+                                        handleFormChange("time", e.target.value)
+                                    }
+                                    aria-invalid={Boolean(formErrors.time)}
+                                />
+                                {formErrors.time && (
+                                    <p className="mt-1 text-sm text-red-500">{formErrors.time}</p>
+                                )}
+                            </div>
                         </div>
 
                         <button
@@ -213,41 +288,59 @@ export default function Appointments() {
                             {editingAppointmentId === appt.id && (
                                 <div className="mt-5 border-t border-slate-100 dark:border-gray-800 pt-5">
                                     <div className="grid md:grid-cols-2 gap-4">
-                                        <input
-                                            placeholder="Patient Name"
-                                            className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
-                                            value={editForm.patientName}
-                                            onChange={(e) =>
-                                                setEditForm({ ...editForm, patientName: e.target.value })
-                                            }
-                                        />
+                                        <div>
+                                            <input
+                                                placeholder="Patient Name"
+                                                className="w-full border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                                value={editForm.patientName}
+                                                onChange={(e) =>
+                                                    handleEditFormChange("patientName", e.target.value)
+                                                }
+                                                aria-invalid={Boolean(editFormErrors.patientName)}
+                                            />
+                                            {editFormErrors.patientName && (
+                                                <p className="mt-1 text-sm text-red-500">{editFormErrors.patientName}</p>
+                                            )}
+                                        </div>
 
                                         <input
                                             placeholder="Primary Complaint"
                                             className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
                                             value={editForm.complaint}
                                             onChange={(e) =>
-                                                setEditForm({ ...editForm, complaint: e.target.value })
+                                                handleEditFormChange("complaint", e.target.value)
                                             }
                                         />
 
-                                        <input
-                                            type="date"
-                                            className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
-                                            value={editForm.date}
-                                            onChange={(e) =>
-                                                setEditForm({ ...editForm, date: e.target.value })
-                                            }
-                                        />
+                                        <div>
+                                            <input
+                                                type="date"
+                                                className="w-full border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                                value={editForm.date}
+                                                onChange={(e) =>
+                                                    handleEditFormChange("date", e.target.value)
+                                                }
+                                                aria-invalid={Boolean(editFormErrors.date)}
+                                            />
+                                            {editFormErrors.date && (
+                                                <p className="mt-1 text-sm text-red-500">{editFormErrors.date}</p>
+                                            )}
+                                        </div>
 
-                                        <input
-                                            type="time"
-                                            className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
-                                            value={editForm.time}
-                                            onChange={(e) =>
-                                                setEditForm({ ...editForm, time: e.target.value })
-                                            }
-                                        />
+                                        <div>
+                                            <input
+                                                type="time"
+                                                className="w-full border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                                value={editForm.time}
+                                                onChange={(e) =>
+                                                    handleEditFormChange("time", e.target.value)
+                                                }
+                                                aria-invalid={Boolean(editFormErrors.time)}
+                                            />
+                                            {editFormErrors.time && (
+                                                <p className="mt-1 text-sm text-red-500">{editFormErrors.time}</p>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <div className="mt-4 flex flex-wrap gap-2">
@@ -306,5 +399,5 @@ export default function Appointments() {
                 )}
             </div>
         </div>
-    );
+    ) 
 }
