@@ -1,65 +1,67 @@
-import { useState } from "react" 
+import EditAppointmentForm from "./EditAppointmentForm"
 
-export default function AppointmentCard({ appt, onDelete, onUpdate }) {
-  const [isEditing, setIsEditing] = useState(false) 
-  const [name, setName] = useState(appt.patientName) 
-
-  const handleSave = () => {
-    onUpdate(appt.id, {
-      ...appt,
-      patientName: name,
-    }) 
-
-    setIsEditing(false) 
-  } 
-
+export default function AppointmentCard({
+  appointment,
+  formatDoctorName,
+  isEditing,
+  onCancelEdit,
+  onDelete,
+  onSaveEdit,
+  onStartEdit,
+}) {
   return (
-    <div className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-lg shadow-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-      
-      <div>
-        <p className="font-semibold">{appt.doctor}</p>
+    <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl hover:-translate-y-1 transition duration-300 dark:shadow-black/20">
+      <div className="flex flex-col gap-5 sm:flex-row sm:justify-between sm:items-start">
+        <div className="flex-1">
+          <h3 className="font-semibold text-lg flex items-center gap-2">
+            {formatDoctorName(appointment.doctor)}
+            {appointment.specialization && (
+              <span className="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-full">
+                {appointment.specialization}
+              </span>
+            )}
+          </h3>
 
-        {isEditing ? (
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border border-emerald-200 p-1 mt-1 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-        ) : (
-          <p className="text-sm text-gray-600">
-            Patient: {appt.patientName}
+          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+            Patient: {appointment.patientName}
           </p>
-        )}
 
-        <p className="text-xs text-gray-400">
-          {new Date(appt.date).toLocaleString()}
-        </p>
+          {appointment.complaint && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Primary Complaint: {appointment.complaint}
+            </p>
+          )}
+
+          <div className="text-xs text-gray-400 mt-2 flex gap-4">
+            <span>Date: {appointment.date?.split(" ")[0]}</span>
+            <span>Time: {appointment.date?.split(" ")[1]}</span>
+          </div>
+        </div>
+
+        <div className="flex gap-2">
+          <button
+            onClick={onStartEdit}
+            className="text-emerald-600 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900 px-3 py-1 rounded transition"
+          >
+            Update
+          </button>
+
+          <button
+            onClick={onDelete}
+            className="text-red-500 hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 px-3 py-1 rounded transition"
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
-      <div className="flex gap-2">
-        {isEditing ? (
-          <button
-            onClick={handleSave}
-            className="bg-emerald-600 text-white px-3 py-1 rounded hover:bg-emerald-700 transition"
-          >
-            Save
-          </button>
-        ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="bg-yellow-500 text-white px-3 py-1 rounded"
-          >
-            Edit
-          </button>
-        )}
-
-        <button
-          onClick={() => onDelete(appt.id)}
-          className="bg-red-500 text-white px-3 py-1 rounded"
-        >
-          Delete
-        </button>
-      </div>
+      {isEditing && (
+        <EditAppointmentForm
+          appointment={appointment}
+          onCancel={onCancelEdit}
+          onSave={onSaveEdit}
+        />
+      )}
     </div>
-  ) 
+  )
 }

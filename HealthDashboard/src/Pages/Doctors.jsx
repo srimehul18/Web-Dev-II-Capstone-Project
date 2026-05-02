@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react" 
 import { useNavigate } from "react-router-dom" 
-import DoctorCard from "../components/DoctorCard" 
-import useDebounce from "../hooks/useDebounce" 
+import DoctorFilters from "../components/DoctorFilters"
+import DoctorList from "../components/DoctorList"
+import DoctorSearchBar from "../components/DoctorSearchBar"
+import Pagination from "../components/Pagination"
 import { validFields } from "./validfields" 
 
 const doctorNames = [
@@ -37,8 +39,8 @@ const createMockDoctors = () =>
 
 export default function Doctors() {
   const [query, setQuery] = useState("") 
+  const [debouncedQuery, setDebouncedQuery] = useState("")
   const [specialization, setSpecialization] = useState("") 
-  const debouncedQuery = useDebounce(query, 500) 
 
   const [doctors, setDoctors] = useState([]) 
   const [topDoctors] = useState(() => shuffle(createMockDoctors())) 
@@ -48,6 +50,18 @@ export default function Doctors() {
 
   const navigate = useNavigate() 
   const doctorsPerPage = 6 
+
+  const handleQueryChange = (value) => {
+    setQuery(value) 
+    if (!value) setSpecialization("") 
+    setCurrentPage(1) 
+  }
+
+  const clearSearch = () => {
+    setQuery("") 
+    setSpecialization("") 
+    setCurrentPage(1) 
+  }
 
   useEffect(() => {
     if (!debouncedQuery) {
@@ -147,32 +161,12 @@ export default function Doctors() {
           </p>
         </div>
 
-        <div className="relative">
-          <input
-            placeholder="Search specialization like Cardiologist..."
-            value={query}
-            onChange={(e) => {
-              const value = e.target.value 
-              setQuery(value) 
-              if (!value) setSpecialization("") 
-              setCurrentPage(1) 
-            }}
-            className="w-full rounded-xl border border-emerald-200 bg-white p-3 pl-4 pr-10 text-gray-900 shadow-sm outline-none transition focus:ring-2 focus:ring-emerald-500 dark:border-emerald-900 dark:bg-gray-900 dark:text-white"
-          />
-
-          {query && (
-            <button
-              onClick={() => {
-                setQuery("") 
-                setSpecialization("") 
-                setCurrentPage(1) 
-              }}
-              className="absolute right-3 top-3 text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
-            >
-              X
-            </button>
-          )}
-        </div>
+        <DoctorSearchBar
+          query={query}
+          onClear={clearSearch}
+          onDebouncedQueryChange={setDebouncedQuery}
+          onQueryChange={handleQueryChange}
+        />
 
         <div className="mt-4 flex flex-wrap gap-3">
           {validFields.slice(0, 8).map((field) => (
@@ -186,35 +180,18 @@ export default function Doctors() {
           ))}
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-4">
-          <button
-            onClick={() => {
-              setAvailability(!availability) 
-              setCurrentPage(1) 
-            }}
-            className={`rounded-full px-3 py-1 transition ${
-              availability
-                ? "bg-emerald-600 text-white shadow-md shadow-emerald-200 dark:shadow-black/20"
-                : "bg-white text-gray-700 shadow-sm shadow-slate-200 hover:bg-emerald-50 dark:bg-gray-900 dark:text-gray-200 dark:shadow-black/20"
-            }`}
-          >
-            Available Today
-          </button>
-
-          <button
-            onClick={() => {
-              setRatingFilter(!ratingFilter) 
-              setCurrentPage(1) 
-            }}
-            className={`rounded-full px-3 py-1 transition ${
-              ratingFilter
-                ? "bg-amber-500 text-white shadow-md shadow-amber-200 dark:shadow-black/20"
-                : "bg-white text-gray-700 shadow-sm shadow-slate-200 hover:bg-amber-50 dark:bg-gray-900 dark:text-gray-200 dark:shadow-black/20"
-            }`}
-          >
-            Rating 4+
-          </button>
-        </div>
+        <DoctorFilters
+          availability={availability}
+          ratingFilter={ratingFilter}
+          onToggleAvailability={() => {
+            setAvailability(!availability) 
+            setCurrentPage(1) 
+          }}
+          onToggleRating={() => {
+            setRatingFilter(!ratingFilter) 
+            setCurrentPage(1) 
+          }}
+        />
 
         <div className="mt-10 flex flex-col gap-1">
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
@@ -236,50 +213,17 @@ export default function Doctors() {
           </div>
         )}
 
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {paginatedDoctors.map((doc) => (
-            <DoctorCard
-              key={`${doc.name}-${doc.specialization}-${doc.image}`}
-              doc={doc}
-              onBook={handleBook}
-              query={specialization}
-            />
-          ))}
-        </div>
+        <DoctorList
+          doctors={paginatedDoctors}
+          onBook={handleBook}
+          query={specialization}
+        />
 
-        {totalPages > 1 && (
-          <div className="mt-8 flex items-center justify-center gap-2">
-            <button
-              onClick={() => setCurrentPage((page) => page - 1)}
-              disabled={currentPage === 1}
-              className="rounded-full bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm shadow-slate-200 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-gray-900 dark:text-gray-200 dark:shadow-black/20"
-            >
-              Previous
-            </button>
-
-            {[...Array(totalPages)].map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentPage(index + 1)}
-                className={`h-9 w-9 rounded-full text-sm font-semibold transition ${
-                  currentPage === index + 1
-                    ? "bg-emerald-600 text-white shadow-md shadow-emerald-200 dark:shadow-black/20"
-                    : "bg-white text-gray-700 shadow-sm shadow-slate-200 hover:bg-emerald-50 dark:bg-gray-900 dark:text-gray-200 dark:shadow-black/20"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
-
-            <button
-              onClick={() => setCurrentPage((page) => page + 1)}
-              disabled={currentPage === totalPages}
-              className="rounded-full bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm shadow-slate-200 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-gray-900 dark:text-gray-200 dark:shadow-black/20"
-            >
-              Next
-            </button>
-          </div>
-        )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   ) 
