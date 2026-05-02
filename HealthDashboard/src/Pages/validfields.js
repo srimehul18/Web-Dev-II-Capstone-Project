@@ -29,4 +29,4 @@ export const validFields = [
   "physiatrist",
   "surgeon",
   "epidemiologist"
-];
+] 

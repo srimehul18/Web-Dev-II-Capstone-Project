@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import {
   CalendarCheck,
   ClipboardList,
@@ -6,12 +6,12 @@ import {
   HeartPulse,
   Search,
   Stethoscope,
-} from "lucide-react";
-import { useApp } from "../context/AppContext";
+} from "lucide-react"
+import { useApp } from "../context/AppContext"
 
 export default function Home() {
-  const { appointments } = useApp();
-  const recentAppointments = appointments.slice(-3).reverse();
+  const { appointments } = useApp()
+  const recentAppointments = appointments.slice(-3).reverse()
 
   const stats = [
     {
@@ -30,7 +30,7 @@ export default function Home() {
       value: 5,
       icon: FileText,
     },
-  ];
+  ]
 
   const features = [
     {
@@ -48,7 +48,7 @@ export default function Home() {
       text: "Monitor appointment activity and healthcare data in one place.",
       icon: HeartPulse,
     },
-  ];
+  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white transition dark:from-gray-950 dark:to-gray-900">
@@ -99,25 +99,23 @@ export default function Home() {
 
       <section className="mx-auto grid max-w-7xl gap-6 px-6 py-8 md:grid-cols-3">
         {stats.map((stat) => {
-          const Icon = stat.icon;
+          const Icon = stat.icon
 
           return (
             <div
               key={stat.label}
-              className={`rounded-2xl p-6 shadow-lg transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-xl dark:shadow-black/20 ${
-                stat.highlight
+              className={`rounded-2xl p-6 shadow-lg transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-xl dark:shadow-black/20 ${stat.highlight
                   ? "bg-emerald-600 text-white shadow-emerald-200"
                   : "bg-white text-gray-900 shadow-slate-200/70 dark:bg-gray-900 dark:text-gray-100"
-              }`}
+                }`}
             >
               <div className="flex items-start justify-between">
                 <div>
                   <p
-                    className={`text-xs font-semibold uppercase tracking-wide ${
-                      stat.highlight
+                    className={`text-xs font-semibold uppercase tracking-wide ${stat.highlight
                         ? "text-emerald-100"
                         : "text-gray-400 dark:text-gray-500"
-                    }`}
+                      }`}
                   >
                     {stat.label}
                   </p>
@@ -126,23 +124,22 @@ export default function Home() {
                   </h2>
                 </div>
                 <div
-                  className={`rounded-xl p-3 ${
-                    stat.highlight
+                  className={`rounded-xl p-3 ${stat.highlight
                       ? "bg-white/15 text-white"
                       : "bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300"
-                  }`}
+                    }`}
                 >
                   <Icon className="h-6 w-6" />
                 </div>
               </div>
             </div>
-          );
+          )
         })}
       </section>
 
       <section className="mx-auto grid max-w-7xl gap-6 px-6 py-10 md:grid-cols-3">
         {features.map((feature) => {
-          const Icon = feature.icon;
+          const Icon = feature.icon
 
           return (
             <div
@@ -159,7 +156,7 @@ export default function Home() {
                 {feature.text}
               </p>
             </div>
-          );
+          )
         })}
       </section>
 
@@ -221,5 +218,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  );
+  )
 }

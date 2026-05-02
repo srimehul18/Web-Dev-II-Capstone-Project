@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { useApp } from "../context/AppContext";
+import { Link } from "react-router-dom"
+import { useApp } from "../context/AppContext"
 import {
   Activity,
   Bell,
@@ -9,89 +9,89 @@ import {
   Stethoscope,
   User,
   Users,
-} from "lucide-react";
+} from "lucide-react"
 
-const parseAppointmentDate = (date) => new Date((date || "").replace(" ", "T"));
+const parseAppointmentDate = (date) => new Date((date || "").replace(" ", "T"))
 
 const formatAppointmentDate = (date) => {
-  const parsedDate = parseAppointmentDate(date);
+  const parsedDate = parseAppointmentDate(date)
 
-  if (Number.isNaN(parsedDate.getTime())) return date || "Not scheduled";
+  if (Number.isNaN(parsedDate.getTime())) return date || "Not scheduled"
 
   return parsedDate.toLocaleString([], {
     month: "short",
     day: "numeric",
     hour: "numeric",
     minute: "2-digit",
-  });
-};
+  })
+}
 
 export default function Dashboard() {
-  const { appointments, user } = useApp();
+  const { appointments, user } = useApp()
 
-  const now = new Date();
-  const greetingHour = now.getHours();
+  const now = new Date()
+  const greetingHour = now.getHours()
   const greeting =
     greetingHour < 12
       ? "Good morning"
       : greetingHour < 17
         ? "Good afternoon"
-        : "Good evening";
+        : "Good evening"
 
-  const userName = user?.name || "Mehul";
-  const totalAppointments = appointments.length;
-  const today = now.toLocaleDateString();
+  const userName = user?.name || "Mehul"
+  const totalAppointments = appointments.length
+  const today = now.toLocaleDateString()
 
   const todayAppointments = appointments.filter(
     (appt) => parseAppointmentDate(appt.date).toLocaleDateString() === today
-  );
+  )
 
-  const todayCount = todayAppointments.length;
+  const todayCount = todayAppointments.length
 
   const uniqueDoctors = new Set(
     appointments.map((appt) => appt.doctor).filter(Boolean)
-  ).size;
+  ).size
 
   const lastAppointment =
     appointments.length > 0
       ? appointments[appointments.length - 1]
-      : null;
+      : null
 
   const upcomingAppointments = appointments
     .filter((appt) => parseAppointmentDate(appt.date) >= now)
-    .sort((a, b) => parseAppointmentDate(a.date) - parseAppointmentDate(b.date));
+    .sort((a, b) => parseAppointmentDate(a.date) - parseAppointmentDate(b.date))
 
-  const nextAppointment = upcomingAppointments[0] || null;
-  const recentAppointments = appointments.slice(-4).reverse();
+  const nextAppointment = upcomingAppointments[0] || null
+  const recentAppointments = appointments.slice(-4).reverse()
 
-  const weekStart = new Date(now);
-  weekStart.setDate(now.getDate() - now.getDay());
-  weekStart.setHours(0, 0, 0, 0);
+  const weekStart = new Date(now)
+  weekStart.setDate(now.getDate() - now.getDay())
+  weekStart.setHours(0, 0, 0, 0)
 
-  const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekStart.getDate() + 7);
+  const weekEnd = new Date(weekStart)
+  weekEnd.setDate(weekStart.getDate() + 7)
 
   const appointmentsThisWeek = appointments.filter((appt) => {
-    const apptDate = parseAppointmentDate(appt.date);
-    return apptDate >= weekStart && apptDate < weekEnd;
-  }).length;
+    const apptDate = parseAppointmentDate(appt.date)
+    return apptDate >= weekStart && apptDate < weekEnd
+  }).length
 
   const doctorVisitCounts = appointments.reduce((counts, appt) => {
-    if (!appt.doctor) return counts;
-    counts[appt.doctor] = (counts[appt.doctor] || 0) + 1;
-    return counts;
-  }, {});
+    if (!appt.doctor) return counts
+    counts[appt.doctor] = (counts[appt.doctor] || 0) + 1
+    return counts
+  }, {})
 
   const mostVisitedDoctor =
     Object.entries(doctorVisitCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ||
-    "No visits yet";
+    "No visits yet"
 
   const nextAppointmentDate = nextAppointment
     ? parseAppointmentDate(nextAppointment.date)
-    : null;
+    : null
   const hoursUntilNextAppointment = nextAppointmentDate
     ? Math.max(0, Math.ceil((nextAppointmentDate - now) / (1000 * 60 * 60)))
-    : null;
+    : null
 
   const notifications = [
     todayCount > 0
@@ -100,11 +100,10 @@ export default function Dashboard() {
     nextAppointment && hoursUntilNextAppointment !== null
       ? hoursUntilNextAppointment === 0
         ? "Your next appointment starts soon"
-        : `Next appointment in ${hoursUntilNextAppointment} hour${
-            hoursUntilNextAppointment === 1 ? "" : "s"
-          }`
+        : `Next appointment in ${hoursUntilNextAppointment} hour${hoursUntilNextAppointment === 1 ? "" : "s"
+        }`
       : "No upcoming appointments yet",
-  ];
+  ]
 
   const quickActions = [
     {
@@ -122,7 +121,7 @@ export default function Dashboard() {
       to: "/appointments",
       icon: Clock3,
     },
-  ];
+  ]
 
   const insights = [
     {
@@ -140,7 +139,7 @@ export default function Dashboard() {
       value: todayAppointments.filter((appt) => parseAppointmentDate(appt.date) >= now).length,
       icon: Clock3,
     },
-  ];
+  ]
 
   return (
     <div className="min-h-screen bg-slate-50 px-6 py-10 transition dark:bg-gray-950">
@@ -228,7 +227,7 @@ export default function Dashboard() {
 
         <section className="mt-8 grid gap-4 md:grid-cols-3">
           {quickActions.map((action) => {
-            const Icon = action.icon;
+            const Icon = action.icon
 
             return (
               <Link
@@ -241,7 +240,7 @@ export default function Dashboard() {
                 </span>
                 {action.label}
               </Link>
-            );
+            )
           })}
         </section>
 
@@ -333,7 +332,7 @@ export default function Dashboard() {
 
         <section className="mt-8 grid gap-4 md:grid-cols-3">
           {insights.map((insight) => {
-            const Icon = insight.icon;
+            const Icon = insight.icon
 
             return (
               <div
@@ -350,7 +349,7 @@ export default function Dashboard() {
                   {insight.value}
                 </p>
               </div>
-            );
+            )
           })}
         </section>
 
@@ -372,7 +371,7 @@ export default function Dashboard() {
           {recentAppointments.length > 0 ? (
             <div className="space-y-3">
               {recentAppointments.map((appt) => {
-                const isUpcoming = parseAppointmentDate(appt.date) >= now;
+                const isUpcoming = parseAppointmentDate(appt.date) >= now
 
                 return (
                   <div
@@ -395,11 +394,10 @@ export default function Dashboard() {
                     </div>
                     <div className="flex flex-col gap-2 sm:items-end">
                       <span
-                        className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${
-                          isUpcoming
+                        className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${isUpcoming
                             ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
                             : "bg-slate-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300"
-                        }`}
+                          }`}
                       >
                         {isUpcoming ? "Upcoming" : "Completed"}
                       </span>
@@ -409,7 +407,7 @@ export default function Dashboard() {
                       </p>
                     </div>
                   </div>
-                );
+                )
               })}
             </div>
           ) : (
@@ -425,5 +423,5 @@ export default function Dashboard() {
         </section>
       </div>
     </div>
-  );
+  )
 }

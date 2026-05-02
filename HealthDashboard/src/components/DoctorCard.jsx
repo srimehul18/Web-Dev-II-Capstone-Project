@@ -40,5 +40,5 @@ export default function DoctorCard({ doc, onBook, query }) {
         Book Appointment
       </button>
     </div>
-  );
+  ) 
 }

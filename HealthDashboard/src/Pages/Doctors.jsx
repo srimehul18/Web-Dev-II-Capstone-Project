@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import DoctorCard from "../components/DoctorCard";
-import useDebounce from "../hooks/useDebounce";
-import { validFields } from "./validfields";
+import { useEffect, useState } from "react" 
+import { useNavigate } from "react-router-dom" 
+import DoctorCard from "../components/DoctorCard" 
+import useDebounce from "../hooks/useDebounce" 
+import { validFields } from "./validfields" 
 
 const doctorNames = [
   "Aarav Sharma",
@@ -17,12 +17,12 @@ const doctorNames = [
   "Sophia Davis",
   "Liam Wilson",
   "Isha Kapoor",
-];
+] 
 
 const formatSpecialization = (field) =>
-  field.charAt(0).toUpperCase() + field.slice(1);
+  field.charAt(0).toUpperCase() + field.slice(1) 
 
-const shuffle = (items) => [...items].sort(() => Math.random() - 0.5);
+const shuffle = (items) => [...items].sort(() => Math.random() - 0.5) 
 
 const createMockDoctors = () =>
   validFields.map((field, index) => ({
@@ -33,25 +33,25 @@ const createMockDoctors = () =>
     rating: (4 + (index % 10) / 10).toFixed(1),
     available: index % 4 !== 0,
     specialization: formatSpecialization(field),
-  }));
+  })) 
 
 export default function Doctors() {
-  const [query, setQuery] = useState("");
-  const [specialization, setSpecialization] = useState("");
-  const debouncedQuery = useDebounce(query, 500);
+  const [query, setQuery] = useState("") 
+  const [specialization, setSpecialization] = useState("") 
+  const debouncedQuery = useDebounce(query, 500) 
 
-  const [doctors, setDoctors] = useState([]);
-  const [topDoctors] = useState(() => shuffle(createMockDoctors()));
-  const [availability, setAvailability] = useState(false);
-  const [ratingFilter, setRatingFilter] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [doctors, setDoctors] = useState([]) 
+  const [topDoctors] = useState(() => shuffle(createMockDoctors())) 
+  const [availability, setAvailability] = useState(false) 
+  const [ratingFilter, setRatingFilter] = useState(false) 
+  const [currentPage, setCurrentPage] = useState(1) 
 
-  const navigate = useNavigate();
-  const doctorsPerPage = 6;
+  const navigate = useNavigate() 
+  const doctorsPerPage = 6 
 
   useEffect(() => {
     if (!debouncedQuery) {
-      return;
+      return 
     }
 
     const fetchSpecialization = async () => {
@@ -60,25 +60,25 @@ export default function Doctors() {
           `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(
             debouncedQuery
           )}&limit=5&origin=*`
-        );
-        const data = await res.json();
-        const suggestions = data[1] || [];
+        ) 
+        const data = await res.json() 
+        const suggestions = data[1] || [] 
         const ologistSuggestion = suggestions.find((suggestion) =>
           suggestion.toLowerCase().includes("ologist")
-        );
-        const result = ologistSuggestion || suggestions[0] || debouncedQuery;
+        ) 
+        const result = ologistSuggestion || suggestions[0] || debouncedQuery 
 
-        setSpecialization(result);
-        return result;
+        setSpecialization(result) 
+        return result 
       } catch {
-        setSpecialization(debouncedQuery);
-        return debouncedQuery;
+        setSpecialization(debouncedQuery) 
+        return debouncedQuery 
       }
-    };
+    } 
 
     const fetchDoctors = async (resolvedSpecialization) => {
-      const res = await fetch("https://randomuser.me/api/?results=6");
-      const data = await res.json();
+      const res = await fetch("https://randomuser.me/api/?results=6") 
+      const data = await res.json() 
 
       const docs = data.results.map((u) => ({
         name: `${u.name.first} ${u.name.last}`,
@@ -86,18 +86,18 @@ export default function Doctors() {
         rating: (Math.random() * 2 + 3).toFixed(1),
         available: Math.random() > 0.3,
         specialization: resolvedSpecialization,
-      }));
+      })) 
 
-      setDoctors(docs);
-    };
+      setDoctors(docs) 
+    } 
 
     const loadDoctors = async () => {
-      const resolvedSpecialization = await fetchSpecialization();
-      fetchDoctors(resolvedSpecialization);
-    };
+      const resolvedSpecialization = await fetchSpecialization() 
+      fetchDoctors(resolvedSpecialization) 
+    } 
 
-    loadDoctors();
-  }, [debouncedQuery]);
+    loadDoctors() 
+  }, [debouncedQuery]) 
 
   const handleBook = (doc) => {
     navigate("/appointments", {
@@ -105,35 +105,35 @@ export default function Doctors() {
         doctor: doc.name,
         specialization: doc.specialization,
       },
-    });
-  };
+    }) 
+  } 
 
   const handleSpecialtyClick = (field) => {
-    setQuery(field);
-    setCurrentPage(1);
-  };
+    setQuery(field) 
+    setCurrentPage(1) 
+  } 
 
-  const searchTerm = (specialization || debouncedQuery).toLowerCase();
-  const sourceDoctors = debouncedQuery ? doctors : topDoctors;
+  const searchTerm = (specialization || debouncedQuery).toLowerCase() 
+  const sourceDoctors = debouncedQuery ? doctors : topDoctors 
 
   const filteredDoctors = sourceDoctors.filter((doc) => {
     const matchesSearch =
       !debouncedQuery ||
       doc.specialization.toLowerCase().includes(searchTerm) ||
-      doc.specialization.toLowerCase().includes(debouncedQuery.toLowerCase());
+      doc.specialization.toLowerCase().includes(debouncedQuery.toLowerCase()) 
 
-    if (!matchesSearch) return false;
-    if (availability && !doc.available) return false;
-    if (ratingFilter && Number(doc.rating) < 4) return false;
-    return true;
-  });
+    if (!matchesSearch) return false 
+    if (availability && !doc.available) return false 
+    if (ratingFilter && Number(doc.rating) < 4) return false 
+    return true 
+  }) 
 
-  const totalPages = Math.ceil(filteredDoctors.length / doctorsPerPage);
-  const startIndex = (currentPage - 1) * doctorsPerPage;
+  const totalPages = Math.ceil(filteredDoctors.length / doctorsPerPage) 
+  const startIndex = (currentPage - 1) * doctorsPerPage 
   const paginatedDoctors = filteredDoctors.slice(
     startIndex,
     startIndex + doctorsPerPage
-  );
+  ) 
 
   return (
     <div className="min-h-screen bg-slate-50 px-6 py-10 transition dark:bg-gray-950">
@@ -152,10 +152,10 @@ export default function Doctors() {
             placeholder="Search specialization like Cardiologist..."
             value={query}
             onChange={(e) => {
-              const value = e.target.value;
-              setQuery(value);
-              if (!value) setSpecialization("");
-              setCurrentPage(1);
+              const value = e.target.value 
+              setQuery(value) 
+              if (!value) setSpecialization("") 
+              setCurrentPage(1) 
             }}
             className="w-full rounded-xl border border-emerald-200 bg-white p-3 pl-4 pr-10 text-gray-900 shadow-sm outline-none transition focus:ring-2 focus:ring-emerald-500 dark:border-emerald-900 dark:bg-gray-900 dark:text-white"
           />
@@ -163,9 +163,9 @@ export default function Doctors() {
           {query && (
             <button
               onClick={() => {
-                setQuery("");
-                setSpecialization("");
-                setCurrentPage(1);
+                setQuery("") 
+                setSpecialization("") 
+                setCurrentPage(1) 
               }}
               className="absolute right-3 top-3 text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
             >
@@ -189,8 +189,8 @@ export default function Doctors() {
         <div className="mt-4 flex flex-wrap gap-4">
           <button
             onClick={() => {
-              setAvailability(!availability);
-              setCurrentPage(1);
+              setAvailability(!availability) 
+              setCurrentPage(1) 
             }}
             className={`rounded-full px-3 py-1 transition ${
               availability
@@ -203,8 +203,8 @@ export default function Doctors() {
 
           <button
             onClick={() => {
-              setRatingFilter(!ratingFilter);
-              setCurrentPage(1);
+              setRatingFilter(!ratingFilter) 
+              setCurrentPage(1) 
             }}
             className={`rounded-full px-3 py-1 transition ${
               ratingFilter
@@ -282,5 +282,5 @@ export default function Doctors() {
         )}
       </div>
     </div>
-  );
+  ) 
 }

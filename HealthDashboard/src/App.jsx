@@ -1,9 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./Pages/Home";
-import Doctors from "./Pages/Doctors";
-import Appointments from "./Pages/Appointments";
-import Dashboard from "./Pages/Dashboard";
+import { BrowserRouter, Routes, Route } from "react-router-dom" 
+import Navbar from "./components/Navbar" 
+import Home from "./Pages/Home" 
+import Doctors from "./Pages/Doctors" 
+import Appointments from "./Pages/Appointments" 
+import Dashboard from "./Pages/Dashboard" 
 
 
 export default function App() {
@@ -17,5 +17,5 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
-  );
+  ) 
 }

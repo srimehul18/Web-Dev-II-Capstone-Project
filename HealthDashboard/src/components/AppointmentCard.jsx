@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useState } from "react" 
 
 export default function AppointmentCard({ appt, onDelete, onUpdate }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(appt.patientName);
+  const [isEditing, setIsEditing] = useState(false) 
+  const [name, setName] = useState(appt.patientName) 
 
   const handleSave = () => {
     onUpdate(appt.id, {
       ...appt,
       patientName: name,
-    });
+    }) 
 
-    setIsEditing(false);
-  };
+    setIsEditing(false) 
+  } 
 
   return (
     <div className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-lg shadow-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
@@ -61,5 +61,5 @@ export default function AppointmentCard({ appt, onDelete, onUpdate }) {
         </button>
       </div>
     </div>
-  );
+  ) 
 }

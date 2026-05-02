@@ -1,4 +1,4 @@
-import Navbar from "./Navbar";
+import Navbar from "./Navbar" 
 
 export default function Layout({ children }) {
   return (
@@ -6,5 +6,5 @@ export default function Layout({ children }) {
       <Navbar />
       <main className="max-w-5xl mx-auto p-6">{children}</main>
     </div>
-  );
+  ) 
 }
