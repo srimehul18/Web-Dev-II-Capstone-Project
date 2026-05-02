@@ -3,7 +3,7 @@
 HealthDashboard is a modern healthcare web application that enables users to discover doctors, manage appointments, and track healthcare activity through a clean, responsive, and user-friendly interface.
 
 ## Live Demo
-https://your-vercel-link.vercel.app
+https://web-dev-ii-capstone-project-zeta.vercel.app/
 
 ## Screenshots
 
