@@ -2,20 +2,23 @@ import { useApp } from "../context/AppContext";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 
+const emptyAppointmentForm = {
+    patientName: "",
+    complaint: "",
+    date: "",
+    time: "",
+};
+
 export default function Appointments() {
-    const { appointments, deleteAppointment, addAppointment } = useApp();
+    const { appointments, deleteAppointment, addAppointment, updateAppointment } = useApp();
     const location = useLocation();
     const selectedDoctor = location.state?.doctor;
     const selectedSpecialization = location.state?.specialization;
 
-    const [form, setForm] = useState({
-        patientName: "",
-        complaint: "",
-        date: "",
-        time: "",
-    });
-
+    const [form, setForm] = useState(emptyAppointmentForm);
     const [currentPage, setCurrentPage] = useState(1);
+    const [editingAppointmentId, setEditingAppointmentId] = useState(null);
+    const [editForm, setEditForm] = useState(emptyAppointmentForm);
     const itemsPerPage = 5;
 
     const formatDoctorName = (name) => {
@@ -43,14 +46,38 @@ export default function Appointments() {
             date: form.date + " " + form.time,
         });
 
-        setForm({
-            patientName: "",
-            complaint: "",
-            date: "",
-            time: "",
+        setForm(emptyAppointmentForm);
+        window.history.replaceState({}, document.title);
+    };
+
+    const resetEditForm = () => {
+        setEditingAppointmentId(null);
+        setEditForm(emptyAppointmentForm);
+    };
+
+    const startEditingAppointment = (appt) => {
+        const [date = "", time = ""] = (appt.date || "").split(" ");
+
+        setEditingAppointmentId(appt.id);
+        setEditForm({
+            patientName: appt.patientName || "",
+            complaint: appt.complaint || "",
+            date,
+            time,
+        });
+    };
+
+    const handleUpdateAppointment = (appt) => {
+        if (!editForm.patientName || !editForm.date || !editForm.time) return;
+
+        updateAppointment(appt.id, {
+            ...appt,
+            patientName: editForm.patientName,
+            complaint: editForm.complaint,
+            date: editForm.date + " " + editForm.time,
         });
 
-        window.history.replaceState({}, document.title);
+        resetEditForm();
     };
 
     return (
@@ -99,6 +126,7 @@ export default function Appointments() {
                             <input
                                 type="date"
                                 className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                value={form.date}
                                 onChange={(e) =>
                                     setForm({ ...form, date: e.target.value })
                                 }
@@ -107,6 +135,7 @@ export default function Appointments() {
                             <input
                                 type="time"
                                 className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                value={form.time}
                                 onChange={(e) =>
                                     setForm({ ...form, time: e.target.value })
                                 }
@@ -124,7 +153,7 @@ export default function Appointments() {
 
                 {appointments.length === 0 && (
                     <div className="text-center text-gray-500 dark:text-gray-400 mt-20">
-                        <p className="text-lg">📅 No appointments yet</p>
+                        <p className="text-lg">No appointments yet</p>
                         <p className="text-sm mt-2">
                             Book an appointment from the Doctors page
                         </p>
@@ -135,40 +164,109 @@ export default function Appointments() {
                     {currentAppointments.map((appt) => (
                         <div
                             key={appt.id}
-                            className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl hover:-translate-y-1 transition duration-300 flex justify-between items-start dark:shadow-black/20"
+                            className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 rounded-2xl shadow-lg shadow-slate-200/70 hover:shadow-xl hover:-translate-y-1 transition duration-300 dark:shadow-black/20"
                         >
-                            <div>
-                                <h3 className="font-semibold text-lg flex items-center gap-2">
-                                    {formatDoctorName(appt.doctor)}
-                                    {appt.specialization && (
-                                        <span className="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-full">
-                                            {appt.specialization}
-                                        </span>
-                                    )}
-                                </h3>
+                            <div className="flex flex-col gap-5 sm:flex-row sm:justify-between sm:items-start">
+                                <div className="flex-1">
+                                    <h3 className="font-semibold text-lg flex items-center gap-2">
+                                        {formatDoctorName(appt.doctor)}
+                                        {appt.specialization && (
+                                            <span className="text-xs bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-full">
+                                                {appt.specialization}
+                                            </span>
+                                        )}
+                                    </h3>
 
-                                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                                    Patient: {appt.patientName}
-                                </p>
-
-                                {appt.complaint && (
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                        🩺 {appt.complaint}
+                                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                                        Patient: {appt.patientName}
                                     </p>
-                                )}
 
-                                <div className="text-xs text-gray-400 mt-2 flex gap-4">
-                                    <span>📅 {appt.date?.split(" ")[0]}</span>
-                                    <span>⏰ {appt.date?.split(" ")[1]}</span>
+                                    {appt.complaint && (
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                            Primary Complaint: {appt.complaint}
+                                        </p>
+                                    )}
+
+                                    <div className="text-xs text-gray-400 mt-2 flex gap-4">
+                                        <span>Date: {appt.date?.split(" ")[0]}</span>
+                                        <span>Time: {appt.date?.split(" ")[1]}</span>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => startEditingAppointment(appt)}
+                                        className="text-emerald-600 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900 px-3 py-1 rounded transition"
+                                    >
+                                        Update
+                                    </button>
+
+                                    <button
+                                        onClick={() => deleteAppointment(appt.id)}
+                                        className="text-red-500 hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 px-3 py-1 rounded transition"
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </div>
 
-                            <button
-                                onClick={() => deleteAppointment(appt.id)}
-                                className="text-red-500 hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 px-3 py-1 rounded transition"
-                            >
-                                🗑
-                            </button>
+                            {editingAppointmentId === appt.id && (
+                                <div className="mt-5 border-t border-slate-100 dark:border-gray-800 pt-5">
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <input
+                                            placeholder="Patient Name"
+                                            className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                            value={editForm.patientName}
+                                            onChange={(e) =>
+                                                setEditForm({ ...editForm, patientName: e.target.value })
+                                            }
+                                        />
+
+                                        <input
+                                            placeholder="Primary Complaint"
+                                            className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                            value={editForm.complaint}
+                                            onChange={(e) =>
+                                                setEditForm({ ...editForm, complaint: e.target.value })
+                                            }
+                                        />
+
+                                        <input
+                                            type="date"
+                                            className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                            value={editForm.date}
+                                            onChange={(e) =>
+                                                setEditForm({ ...editForm, date: e.target.value })
+                                            }
+                                        />
+
+                                        <input
+                                            type="time"
+                                            className="border p-2 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-emerald-200 dark:border-emerald-900 focus:ring-2 focus:ring-emerald-400 outline-none"
+                                            value={editForm.time}
+                                            onChange={(e) =>
+                                                setEditForm({ ...editForm, time: e.target.value })
+                                            }
+                                        />
+                                    </div>
+
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        <button
+                                            onClick={() => handleUpdateAppointment(appt)}
+                                            className="bg-emerald-600 text-white px-5 py-2 rounded-full shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition dark:shadow-black/20"
+                                        >
+                                            Save Update
+                                        </button>
+
+                                        <button
+                                            onClick={resetEditForm}
+                                            className="px-5 py-2 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

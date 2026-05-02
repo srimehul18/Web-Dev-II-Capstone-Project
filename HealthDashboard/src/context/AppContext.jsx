@@ -64,6 +64,7 @@ export const AppProvider = ({ children }) => {
         fetchAppointments,
         addAppointment,
         deleteAppointment,
+        updateAppointment,
       }}
     >
       {children}
