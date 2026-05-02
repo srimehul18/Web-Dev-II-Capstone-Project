@@ -8,13 +8,24 @@ https://web-dev-ii-capstone-project-zeta.vercel.app/
 ## Screenshots
 
 ### Dashboard
-![Dashboard](./screenshots/dashboard.png)
+<img width="1918" height="883" alt="image" src="https://github.com/user-attachments/assets/c6744920-f058-4277-9538-3d1dd9eb9377" />
+
 
 ### Doctors Page
-![Doctors](./screenshots/doctors.png)
+<img width="1918" height="907" alt="image" src="https://github.com/user-attachments/assets/0ce30b34-1574-465d-a1fa-2b81ed3eaf8b" />
+
 
 ### Appointments Page
-![Appointments](./screenshots/appointments.png)
+<img width="1919" height="795" alt="image" src="https://github.com/user-attachments/assets/2730edf1-75e8-49ec-8978-05122efcea0d" />
+
+### Home Page
+<img width="1919" height="907" alt="image" src="https://github.com/user-attachments/assets/18b2d1ac-1932-4530-9bcf-9b601dbd5d0d" />
+
+### Dark Mode
+<img width="1919" height="875" alt="image" src="https://github.com/user-attachments/assets/33c89924-4aa3-4703-8bd0-82a9161198cb" />
+
+
+
 
 ## Features
 
