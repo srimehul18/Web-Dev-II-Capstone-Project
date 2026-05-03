@@ -25,6 +25,7 @@ export default function StatsCard({
     )
   }
 
+  
   return (
     <div className="rounded-2xl bg-white p-6 shadow-lg shadow-slate-200/70 transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-xl dark:bg-gray-900 dark:shadow-black/20">
       <div className="flex items-start justify-between">

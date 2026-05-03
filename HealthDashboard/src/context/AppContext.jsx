@@ -23,6 +23,7 @@ export const AppProvider = ({ children }) => {
     }
   } 
 
+  
   const addAppointment = async (data) => {
     try {
       await API.post("/Appointments", data) 
