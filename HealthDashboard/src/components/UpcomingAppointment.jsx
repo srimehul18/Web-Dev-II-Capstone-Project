@@ -4,7 +4,7 @@ import { formatAppointmentDate } from "../utils/appointmentDate"
 
 export default function UpcomingAppointment({ nextAppointment }) {
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-emerald-600 p-7 text-white shadow-xl shadow-emerald-200 transition duration-300 hover:-translate-y-1 hover:shadow-2xl dark:bg-emerald-700 dark:shadow-black/30">
+    <section className="relative overflow-hidden rounded-2xl bg-emerald-600 p-7 text-white shadow-xl shadow-emerald-200 transition duration-300 hover:-translate-y-1 hover:shadow-2xl dark:bg-emerald-700 dark:shadow-emerald-500/30">
       <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
       <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>

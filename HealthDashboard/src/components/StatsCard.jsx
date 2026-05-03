@@ -8,7 +8,7 @@ export default function StatsCard({
 }) {
   if (variant === "highlight") {
     return (
-      <div className="relative overflow-hidden rounded-2xl bg-cyan-600 p-6 text-white shadow-xl shadow-cyan-200 transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl dark:bg-cyan-700 dark:shadow-black/30">
+      <div className="relative overflow-hidden rounded-2xl bg-cyan-600 p-6 text-white shadow-xl shadow-cyan-200 transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl dark:bg-cyan-700 dark:shadow-cyan-500/30">
         <div className="relative flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-cyan-100">
